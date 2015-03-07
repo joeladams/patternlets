@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     printf("Process #%d of %d on %s is BEFORE the barrier.\n",
              id, numProcesses, myHostName);
 
-     MPI_Barrier(MPI_COMM_WORLD); 
+//    MPI_Barrier(MPI_COMM_WORLD); 
 
     printf("Process #%d of %d on %s is AFTER the barrier.\n",
              id, numProcesses, myHostName);
