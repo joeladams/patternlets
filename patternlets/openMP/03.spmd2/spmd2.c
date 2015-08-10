@@ -9,7 +9,10 @@
  *
  * Exercise:
  * - Compile & run with no commandline args 
- * - Rerun with different commandline args
+ * - Rerun with different commandline args,
+ *    until you see a problem with thread ids
+ * - Fix the race condition
+ *    (if necessary, compare to 02.spmd)
  */
 
 #include <stdio.h>
