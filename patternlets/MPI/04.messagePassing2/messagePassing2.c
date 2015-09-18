@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 
         if ( odd(id) ) {  // odd processes send, then receive 
             MPI_Send(sendString, strlen(sendString)+1, 
-                      MPI_CHAR, id-1, 1, MPI_COMM_WORLD);
+                       MPI_CHAR, id-1, 1, MPI_COMM_WORLD);
             MPI_Recv(receivedString, SIZE, MPI_CHAR, id-1, 2, 
                        MPI_COMM_WORLD, &status);
         } else {          // even processes receive, then send 
@@ -52,11 +52,12 @@ int main(int argc, char** argv) {
         printf("\nProcess %d of %d received the message:\n\t'%s'\n",
                 id, numProcesses, receivedString);
 
+        free(sendString);
+        free(receivedString);
     } else if ( !id) {  // only process 0 does this part 
         printf("\nPlease run this program using -np N where N is positive and even.\n\n");
     }
 
-    free(sendString); free(receivedString);
     MPI_Finalize();
     return 0;
 }
