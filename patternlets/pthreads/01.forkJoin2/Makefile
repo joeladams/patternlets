@@ -1,5 +1,5 @@
 TARGET = forkJoin2
-CC = gcc
+CC     = gcc
 CFLAGS = -Wall -ansi -pedantic -std=c99
 LFLAGS = -o $(TARGET) -lpthread
 
