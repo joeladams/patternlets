@@ -1,9 +1,9 @@
 TARGET = forkJoin5
-CC     = gcc
-CFLAGS = -Wall -ansi -pedantic -std=c99
+CC = gcc
+CFLAGS = 
 LFLAGS = -o $(TARGET) -lpthread 
 
-$(TARGET): $(TARGET).c
+$(TARGET): $(TARGET).c  timer.h
 	$(CC) $(CFLAGS) $(TARGET).c $(LFLAGS)
 
 clean:

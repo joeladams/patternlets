@@ -3,6 +3,8 @@
  *   of different types using a struct.
  *
  * Joel Adams, Calvin College, Fall 2013.
+ * Libby Shoop, Macalester College, Fall 2014.
+ *      changed for using C time.h inside additional timer.h file
  *
  * Usage: ./forkJoin5 [numThreads]
  */
@@ -10,7 +12,8 @@
 #include <stdio.h>   // printf()
 #include <stdlib.h>  // atoi(), exit(), ...
 #include <pthread.h> // pthread types and functions
-#include <mpi.h>     // MPI_Wtime();
+
+#include "timer.h"
 
 typedef struct {
      unsigned long id;
@@ -19,7 +22,8 @@ typedef struct {
 } argStruct;
 
 void* childGreetings(void * buf) { 
-   double stopTime = MPI_Wtime();
+   double stopTime; 
+   GET_TIME(stopTime);
    argStruct * args = (argStruct*) buf;
    unsigned long childID = args->id;
    unsigned long numThreads = args->numThreads;
@@ -56,7 +60,8 @@ int main(int argc, char** argv) {
      args = malloc( sizeof( argStruct ) );
      args->id = id; 
      args->numThreads = numThreads;
-     args->startTime = MPI_Wtime();
+     
+     GET_TIME(args->startTime);           // collect time just before creating
      pthread_create( &(children[id-1]),   // our handle for the child 
                       NULL,               // attributes of the child
                       childGreetings,     // the function it should run
