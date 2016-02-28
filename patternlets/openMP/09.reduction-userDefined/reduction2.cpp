@@ -44,10 +44,10 @@ int main(int argc, char** argv) {  // on a 2GHz i7 CPU:
 	unsigned numThreads = 1;
 
 	switch (argc) {
-		case 3: n = atoi(argv[1]);
-		case 2: numThreads = atoi(argv[2]);
+		case 3: n = atoi(argv[2]);
+		case 2: numThreads = atoi(argv[1]);
 		case 1: break;
-		default: cout << "\nUsage: ./reduction2 [n] [numThreads]\n\n";
+		default: cout << "\nUsage: ./reduction2 [numThreads] [n]\n\n";
 	}
         omp_set_num_threads(numThreads);
 
