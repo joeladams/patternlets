@@ -1,10 +1,10 @@
-/* factorial.cpp computes a table of factorial values,
+/* reduction2.cpp computes a table of factorial values,
  *  using Owen Astrachan's BigInt class to explore
  *  OpenMP's user-defined reductions.
  *
  *  Joel Adams, Calvin College, December 2015.
  *
- *  Usage: ./factorial [numThreads] [n]
+ *  Usage: ./reduction2 [numThreads] [n]
  *
  *  Exercise:
  *  - Build and run, record sequential time in a spreadsheet
@@ -47,7 +47,7 @@ int main(int argc, char** argv) {  // on a 2GHz i7 CPU:
 		case 3: n = atoi(argv[1]);
 		case 2: numThreads = atoi(argv[2]);
 		case 1: break;
-		default: cout << "\nUsage: ./factorial [n] [numThreads]\n\n";
+		default: cout << "\nUsage: ./reduction2 [n] [numThreads]\n\n";
 	}
         omp_set_num_threads(numThreads);
 

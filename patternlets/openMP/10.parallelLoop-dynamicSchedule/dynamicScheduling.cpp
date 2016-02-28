@@ -1,10 +1,10 @@
-/* factorialTable.cpp computes a table of factorial values,
+/* dynamicScheduling.cpp computes a table of factorial values,
  *  using Owen Astrachan's BigInt class to explore
  *  OpenMP's schedule() clause.
  *
  *  @author: Joel Adams, Calvin College, Dec 2015.
  *
- *  Usage: ./factorialTable [numThreads]
+ *  Usage: ./dynamicScheduling [numThreads]
  *
  *  Exercise:
  *  - Build and run, record sequential run time in a spreadsheet
