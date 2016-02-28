@@ -52,7 +52,7 @@ int main(int argc, char** argv) {            // on a 2 GHz i7 CPU:
 	double totalTime = omp_get_wtime() - startTime;
 
 	cout << "Computing 0! .. " << MAX << "! took: " 
-             << totalTime << " secs" << endl;
+             << totalTime << " secs\n" << endl;
 
 	// run a few tests to validate the results
 	assert( factorialTable[0] == 1 );
@@ -68,6 +68,6 @@ int main(int argc, char** argv) {            // on a 2 GHz i7 CPU:
 						    + "4146397615651828625369792082"
 						    + "7223758251185210916864000000"
 						    + "000000000000000000" ) );
-	cout << "All tests passed!\n" << flush;
+	cout << "All tests passed!\n" << endl;
 }
 
