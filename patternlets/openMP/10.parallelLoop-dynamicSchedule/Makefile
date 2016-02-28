@@ -1,4 +1,4 @@
-TARGET = scheduling
+TARGET = dynamicScheduling
 OBJS   = $(TARGET).o BigInt.o
 CC     = g++
 CFLAGS = -c -Wall -ansi -pedantic -std=c++0x -fopenmp
