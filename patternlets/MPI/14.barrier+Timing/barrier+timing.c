@@ -24,6 +24,14 @@
 
 #define  MASTER 0
 
+/* answer the ultimate question of life, the universe, 
+ *  and everything, based on id and numProcs.
+ * @param: id, an int
+ * @param: numProcs, an int
+ * Precondition: id is the MPI rank of this process
+ *             && numProcs is the number of MPI processes.
+ * Postcondition: The return value is 42.
+ */
 int solveProblem(int id, int numProcs) {
 
     sleep( ((double)id+1) / numProcs);
