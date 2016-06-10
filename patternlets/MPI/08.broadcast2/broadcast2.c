@@ -38,31 +38,33 @@ void fill(int* a, int size) {
  *              && a is the address of an 8-element int array.
  * Postcondition: str, id, and a have all been written to stdout.
  */
-void print(char* str, int id, int* a) {
-	printf("%s broadcast, process %d has: {%d, %d, %d, %d, %d, %d, %d, %d}\n",
-	   str, id, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
+void print(char* str, int id, char* host, int* a) {
+	printf("%s broadcast, process %d on host '%s' has: {%d, %d, %d, %d, %d, %d, %d, %d}\n",
+	   str, id, host, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
 }
 
 #define MAX 8
 
 int main(int argc, char** argv) {
-	int array[MAX] = {0};
-        int numProcs, myRank;
+    int array[MAX] = {0};
+    int numProcs = 0, myRank = 0, length = 0;
+    char myHostName[MPI_MAX_PROCESSOR_NAME];
 
-	MPI_Init(&argc, &argv);
-        MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
-        MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+    MPI_Get_processor_name (myHostName, &length);
 
-	if (myRank == 0) fill(array, MAX);
+    if (myRank == 0) { fill(array, MAX); }
      
-	print("BEFORE", myRank, array);
+    print("BEFORE", myRank, myHostName, array);
 
-        MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
 
-	print("AFTER", myRank, array);
+    print("AFTER", myRank, myHostName, array);
 
- 	MPI_Finalize();
+    MPI_Finalize();
 
-	return 0;
+    return 0;
 }
 

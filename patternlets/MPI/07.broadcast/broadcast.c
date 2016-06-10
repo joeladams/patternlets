@@ -18,31 +18,35 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define MASTER 0
+
 int main(int argc, char** argv) {
-	int answer = 0;
-        int numProcs = 0, myRank = 0;
+    int answer = 0, length = 0;
+    int myRank = 0;
 
-	MPI_Init(&argc, &argv);
-        MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
-        MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+    char myHostName[MPI_MAX_PROCESSOR_NAME];
 
-	if (myRank == 0) {
-               FILE *filePtr = fopen("data.txt", "r"); 
-               assert( filePtr != NULL );
-               fscanf(filePtr, " %d", &answer);
-               fclose(filePtr);
-        }
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+    MPI_Get_processor_name (myHostName, &length);
 
-	printf("BEFORE the broadcast, process %d's answer = %d\n",
-                 myRank, answer);
+    if (myRank == MASTER) {
+       FILE *filePtr = fopen("data.txt", "r"); 
+       assert( filePtr != NULL );
+       fscanf(filePtr, " %d", &answer);
+       fclose(filePtr);
+    }
 
-        MPI_Bcast(&answer, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    printf("BEFORE the broadcast, process %d on host '%s' has answer = %d\n",
+             myRank, myHostName, answer);
 
-	printf("AFTER the broadcast, process %d's answer = %d\n",
-                 myRank, answer);
+    MPI_Bcast(&answer, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
- 	MPI_Finalize();
+    printf("AFTER the broadcast, process %d on host '%s' has answer = %d\n",
+             myRank, myHostName, answer);
 
-	return 0;
+    MPI_Finalize();
+
+    return 0;
 }
 
