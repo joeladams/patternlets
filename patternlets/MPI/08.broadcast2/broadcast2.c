@@ -2,7 +2,7 @@
  * ... illustrates the use of MPI_Bcast() for arrays...
  * Joel Adams, Calvin College, November 2009.
  *
- * Usage: mpirun -np N ./broadcast
+ * Usage: mpirun -np N ./broadcast2
  *
  * Exercise:
  * - Compile and run, using 2, 4, and 8 processes
@@ -37,6 +37,11 @@ void fill(int* a, int size) {
  *              && id is the rank of this MPI process
  *              && a is the address of an 8-element int array.
  * Postcondition: str, id, and a have all been written to stdout.
+ *
+ * Note: We print the array's values using a single printf 
+ *       instead of using a loop to print a[i],
+ *       b/c a loop's multiple printfs will be interleaved;
+ *       using a single printf avoids that problem.
  */
 void print(char* str, int id, char* host, int* a) {
 	printf("%s broadcast, process %d on host '%s' has: {%d, %d, %d, %d, %d, %d, %d, %d}\n",
