@@ -6,7 +6,7 @@
  * Note this is much simpler than the 'equal chunks' loop.
  * Joel Adams, Calvin College, November 2009.
  *
- * Usage: mpirun -np N ./parallelForSlices
+ * Usage: mpirun -np N ./parallelLoopChunksOf1
  *
  * Exercise:
  * - Compile and run, varying N: 1, 2, 3, 4, 5, 6, 7, 8
