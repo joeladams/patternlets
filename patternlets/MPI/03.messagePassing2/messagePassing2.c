@@ -9,7 +9,7 @@
  * Exercise:
  * - Compile and run, varying N: 1, 2, 4, 8.
  * - Trace execution using source code.
- * - Compare to messagePassing1.c; note send/receive differences.
+ * - Compare to messagePassing.c; note send/receive differences.
  */
 
 #include <stdio.h>   // printf()

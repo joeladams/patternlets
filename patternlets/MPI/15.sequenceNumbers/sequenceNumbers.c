@@ -1,5 +1,5 @@
 /* sequenceNumbers.c
- *  ... shows how to achive barrier-like behavior
+ *  ... shows how to achieve barrier-like behavior
  *      by using MPI message tags as sequence numbers.
  *
  * Joel Adams, Calvin College, April 2016.
