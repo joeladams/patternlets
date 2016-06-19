@@ -1,75 +1,108 @@
 /* broadcast2.c
  * ... illustrates the use of MPI_Bcast() for arrays...
  * Joel Adams, Calvin College, November 2009.
+ * Steven R. Vegdahl, University of Portland, 2016
+ *   (update to print function)
  *
  * Usage: mpirun -np N ./broadcast2
  *
  * Exercise:
- * - Compile and run, using 2, 4, and 8 processes
+ * - Compile and run, using 2, 4, and 8 processes 
  * - Use source code to trace execution and output
  * - Explain behavior/effect of MPI_Bcast().
  */
 
-#include <mpi.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-/* fill an array with some arbitrary values 
- * @param: a, an int*.
- * @param: size, an int.
- * Precondition: a is the address of an array of ints.
- *              && size is the number of ints a can hold.
- * Postcondition: a has been filled with arbitrary values 
- *                { 11, 12, 13, ... }.
- */
-void fill(int* a, int size) {
-	int i;
-	for (i = 0; i < size; i++) {
-		a[i] = i+11;
-	}
-}
-
-/* display a string, a process id, and its array values 
- * @param: str, a char*
- * @param: id, an int
- * @param: a, an int*.
- * Precondition: str points to either "BEFORE" or "AFTER"
- *              && id is the rank of this MPI process
- *              && a is the address of an 8-element int array.
- * Postcondition: str, id, and a have all been written to stdout.
- *
- * Note: We print the array's values using a single printf 
- *       instead of using a loop to print a[i],
- *       b/c a loop's multiple printfs will be interleaved;
- *       using a single printf avoids that problem.
- */
-void print(char* str, int id, char* host, int* a) {
-	printf("%s broadcast, process %d on host '%s' has: {%d, %d, %d, %d, %d, %d, %d, %d}\n",
-	   str, id, host, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
-}
+#include <mpi.h>        // MPI functions
+#include <stdio.h>      // printf, sprintf, ...
+#include <limits.h>     // CHAR_BIT
 
 #define MAX 8
 
+void fill(int* a, int size);
+void print(char* str, int id, int* a, int size);
+
+
 int main(int argc, char** argv) {
-    int array[MAX] = {0};
-    int numProcs = 0, myRank = 0, length = 0;
-    char myHostName[MPI_MAX_PROCESSOR_NAME];
+  int array[MAX] = {0};
+  int numProcs, myRank;
+  
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
+  MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+  
+  if (myRank == 0) fill(array, MAX);
+  
+  print("BEFORE", myRank, array, MAX);
+  
+  MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
+  
+  print("AFTER", myRank, array, MAX);
+  
+  MPI_Finalize();
+  
+  return 0;
+}
 
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
-    MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
-    MPI_Get_processor_name (myHostName, &length);
 
-    if (myRank == 0) { fill(array, MAX); }
-     
-    print("BEFORE", myRank, myHostName, array);
+/* fill an array with some values
+ * @param: a, an int*.
+ * @param: size, an int.
+ *
+ * Precondition: a is the address of an array of ints.
+ *  && size is the number of ints a can hold.
+ *
+ * Postcondition: a has been filled with values
+ * { 11, 12, 13, ... }.
+ */
+void fill(int* a, int size) {
+  int i;
+  for (i = 0; i < size; i++) {
+    a[i] = i+11;
+  }
+}
 
-    MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
 
-    print("AFTER", myRank, myHostName, array);
+/* display a string, a process id, and its array values
+ * @param: str, a char*
+ * @param: id, an int 
+ * @param: a, an int*
+ * @param: size, an int.
+ *
+ * Precondition: str points to either "BEFORE" or "AFTER"
+ *  && id is the rank of this MPI process
+ *  && a is the address of a MAX-element int array.
+ *
+ * Postcondition: str, id, and a have all been written to stdout.
+ */
 
-    MPI_Finalize();
+#define MAX_INT_PRINT_SIZE ((CHAR_BIT*sizeof(int))+1)
 
-    return 0;
+void print(char* str, int id, int* a, int size) {
+
+  // sprint-buffer, including space for separators and label-strings
+  // assumes that 'str' length is small (e.g., < 10)
+  char buffer[(size+1)*(MAX_INT_PRINT_SIZE+2)+100];
+
+  // internal buffer pointer 
+  char *spot = buffer;
+  
+  // sprint the characters before the elements, updating position
+  spot += sprintf(spot, "%s broadcast, process %d has: {", str, id);
+  
+  // separator string--set to empty string to avoid putting one
+  // before the first element
+  char *sep = "";
+  
+  // sprint each element, bumping internal buffer pointer
+  for (int i = 0; i < size; i++) {
+    spot += sprintf(spot, "%s%d", sep, a[i]);
+    sep = ", ";
+  }
+  
+  // sprint the stuff after the elements
+  spot += sprintf(spot, "}\n");
+  
+  // actually print out the string to stdout
+  printf("%s", buffer);
 }
 
