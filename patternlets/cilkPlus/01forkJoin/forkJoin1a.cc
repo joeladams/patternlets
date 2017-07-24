@@ -57,6 +57,8 @@ void announceAndWork(int task) {
 void doInParallel() {
   int totalWork = 8;
 
+  // note that this loop is for convenience of starting multiple
+  // tasks on the workers
   for (int i = 0; i<totalWork; i++) {
     cilk_spawn announceAndWork(i);
   }
