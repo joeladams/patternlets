@@ -63,7 +63,7 @@ void sendReceivePrint(int id, int numProcesses, char* hostName,
         for(int i = 0; i < numProcesses-1; i++) {
            MPI_Recv(buffer, BUFFER_SIZE, MPI_CHAR, MPI_ANY_SOURCE,
                      tagValue, MPI_COMM_WORLD, &status);
-           printf(buffer);
+           printf("%s", buffer);
         }
     }
 }
