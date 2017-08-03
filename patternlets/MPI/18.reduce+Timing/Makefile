@@ -1,6 +1,6 @@
-PROG = masterWorker
+PROG = reduce+timing
 CC = mpicc
-CFLAGS = -Wall -ansi -pedantic -std=c99 
+CFLAGS = -Wall -std=c99
 LFLAGS = -o $(PROG)
 
 $(PROG): $(PROG).c
