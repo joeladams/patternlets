@@ -22,7 +22,7 @@ if (len(sys.argv) < 3):
 
 if (path.exists("./cluster_nodes")):
     print("using ./cluster_nodes file for names of machines")
-    command = "mpirun -np " + sys.argv[2] + " -hostfile ./cluster_nodes -map-by node python " + sys.argv[1]
+    command = "mpirun -np " + sys.argv[2] + " -hostfile ./cluster_nodes -map-by node " + "python " + sys.argv[1]
 else:
     command = "mpirun -np " + sys.argv[2] + " python " + sys.argv[1]
 

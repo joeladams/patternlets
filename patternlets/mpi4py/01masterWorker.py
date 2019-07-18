@@ -1,4 +1,4 @@
-# masterWorker.py
+# 01masterWorker.py
 # Multiple processes will run this same program concurrently,
 # each creating different output data.
 # Illustrates the master-worker pattern
@@ -7,7 +7,7 @@
 #  Libby Shoop, Macalester College, July 2019
 #
 # Example usage:
-#      python run.py 4
+#      python run.py 01masterWorker.py 4
 #  Here the 4 signifies the number of processes to start up in mpi.
 #  run.py executes this program within mpirun using
 #         the number of processes given.
