@@ -19,19 +19,23 @@
 
 from mpi4py import MPI
 
-comm = MPI.COMM_WORLD
-id = comm.Get_rank()            #number of the process running the code
-numProcesses = comm.Get_size()  #total number of processes running
-myHostName = MPI.Get_processor_name()  #machine name running the code
+def main():
+    comm = MPI.COMM_WORLD
+    id = comm.Get_rank()            #number of the process running the code
+    numProcesses = comm.Get_size()  #total number of processes running
+    myHostName = MPI.Get_processor_name()  #machine name running the code
 
-REPS = 8
+    REPS = 8
 
-if (numProcesses <= REPS):
+    if (numProcesses <= REPS):
 
-    for i in range(id, REPS, numProcesses):
-        print("On {}: Process {} is performing iteration {}".format(myHostName, id, i))
+        for i in range(id, REPS, numProcesses):
+            print("On {}: Process {} is performing iteration {}".format(myHostName, id, i))
 
-else:
-    # can't hove more processes than work; one process reports the error
-    if id == 0 :
-        print("Please run with number of processes less than or equal to {}.".format(REPS))
+    else:
+        # can't hove more processes than work; one process reports the error
+        if id == 0 :
+            print("Please run with number of processes less than or equal to {}.".format(REPS))
+
+########## Run the main function
+main()

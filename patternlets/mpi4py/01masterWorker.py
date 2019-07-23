@@ -22,12 +22,16 @@
 
 from mpi4py import MPI
 
-comm = MPI.COMM_WORLD
-id = comm.Get_rank()            #number of the process running the code
-numProcesses = comm.Get_size()  #total number of processes running
-myHostName = MPI.Get_processor_name()  #machine name running the code
+def main():
+    comm = MPI.COMM_WORLD
+    id = comm.Get_rank()            #number of the process running the code
+    numProcesses = comm.Get_size()  #total number of processes running
+    myHostName = MPI.Get_processor_name()  #machine name running the code
 
-if id == 0:
-    print("Greetings from the master, {} of {} on {}".format(id, numProcesses, myHostName))
-else:
-    print("Greetings from a worker, {} of {} on {}".format(id, numProcesses, myHostName))
+    if id == 0:
+        print("Greetings from the master, {} of {} on {}".format(id, numProcesses, myHostName))
+    else:
+        print("Greetings from a worker, {} of {} on {}".format(id, numProcesses, myHostName))
+
+########## Run the main function
+main()
