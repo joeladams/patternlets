@@ -28,7 +28,7 @@ else:
 
 # Need to check for existence of a 3rd argument and add it
 if (len(sys.argv) == 4):
-    command = command + sys.argv[3]
+    command = command + " " + sys.argv[3]
 
 print("Command that will run is:")
 print(command)
