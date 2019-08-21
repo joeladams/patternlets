@@ -29,9 +29,11 @@ def main():
     myHostName = MPI.Get_processor_name()  #machine name running the code
 
     if id == 0:
-        print("Greetings from the master, {} of {} on {}".format(id, numProcesses, myHostName))
+        print("Greetings from the master, {} of {} on {}"\
+        .format(id, numProcesses, myHostName))
     else:
-        print("Greetings from a worker, {} of {} on {}".format(id, numProcesses, myHostName))
+        print("Greetings from a worker, {} of {} on {}"\
+        .format(id, numProcesses, myHostName))
 
 ########## Run the main function
 main()

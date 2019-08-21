@@ -34,21 +34,25 @@ def main():
         if id == 0:        # master
             #master: generate a dictionary with arbitrary data in it, then send
             data = {'one': 1, 'two': 2, 'three': 3}
-            print("Master Process {} of {} on {} broadcasts {}".format(id, numProcesses, myHostName, data))
+            print("Master Process {} of {} on {} broadcasts {}"\
+            .format(id, numProcesses, myHostName, data))
             for processId in range (1, numProcesses):
                 comm.send(data, dest=processId)
 
         else :
             # worker: start with empty data, then wait to receive from master
             data = {}
-            print("Worker Process {} of {} on {} starts with {}".format(id, numProcesses, myHostName, data))
+            print("Worker Process {} of {} on {} starts with {}"\
+            .format(id, numProcesses, myHostName, data))
             data = comm.recv(source=0)
 
         #check the result
-        print("Process {} of {} on {} has {} after the send/recv broadcast".format(id, numProcesses, myHostName, data))
+        print("Process {} of {} on {} has {} after the send/recv broadcast"\
+        .format(id, numProcesses, myHostName, data))
 
     else :
-        print("Please run this program with the number of processes greater than 1")
+        print("Please run this program with the number of processes \
+greater than 1")
 
 ########## Run the main function
 main()

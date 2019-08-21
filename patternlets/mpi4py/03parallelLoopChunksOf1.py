@@ -30,12 +30,14 @@ def main():
     if (numProcesses <= REPS):
 
         for i in range(id, REPS, numProcesses):
-            print("On {}: Process {} is performing iteration {}".format(myHostName, id, i))
+            print("On {}: Process {} is performing iteration {}"\
+            .format(myHostName, id, i))
 
     else:
         # can't hove more processes than work; one process reports the error
         if id == 0 :
-            print("Please run with number of processes less than or equal to {}.".format(REPS))
+            print("Please run with number of processes less than \
+or equal to {}.".format(REPS))
 
 ########## Run the main function
 main()

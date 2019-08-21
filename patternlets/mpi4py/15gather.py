@@ -38,7 +38,8 @@ def main():
 
     #all processes create small lists
     sendData = genSmallList(id)
-    print("Process {} of {} on {} starts with {}".format(id, numProcesses, myHostName, sendData))
+    print("Process {} of {} on {} starts with {}"\
+    .format(id, numProcesses, myHostName, sendData))
 
     # gather the small lists at the master node:
     # final result is a list whose length == the number of processes
@@ -46,7 +47,8 @@ def main():
 
     # only the master node has all of the small lists
     if id == 0:
-        print("Process {} of {} on {} has result after gather {}".format(id, numProcesses, myHostName, result))
+        print("Process {} of {} on {} has result after gather {}"\
+        .format(id, numProcesses, myHostName, result))
 
 ########## Run the main function
 main()

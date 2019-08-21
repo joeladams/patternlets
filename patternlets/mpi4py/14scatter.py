@@ -48,18 +48,22 @@ def main():
 
     if id == 0:
         data = genListOfLists(numElements)
-        print("Master {} of {} on {} has created list: {}".format(id, numProcesses, myHostName, data))
+        print("Master {} of {} on {} has created list: {}"\
+        .format(id, numProcesses, myHostName, data))
     else:
         data = None
-        print("Worker Process {} of {} on {} starts with {}".format(id, numProcesses, myHostName, data))
+        print("Worker Process {} of {} on {} starts with {}"\
+        .format(id, numProcesses, myHostName, data))
 
     #scatter one small list in the large list on node 0 to each of the processes
     result = comm.scatter(data, root=0)
 
-    print("Process {} of {} on {} has result after scatter {}".format(id, numProcesses, myHostName, result))
+    print("Process {} of {} on {} has result after scatter {}"\
+    .format(id, numProcesses, myHostName, result))
 
     if id == 0:
-        print("Master {} of {} on {} has original list after scatter: {}".format(id, numProcesses, myHostName, data))
+        print("Master {} of {} on {} has original list after scatter: {}"\
+        .format(id, numProcesses, myHostName, data))
 
 ########## Run the main function
 main()

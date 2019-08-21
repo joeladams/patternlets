@@ -50,11 +50,13 @@ def main():
             receivedList = comm.recv(source=id+1)
             comm.send(sendList, dest=id+1)
 
-        print("Process {} of {} on {} computed {} and received {}".format(id, numProcesses, myHostName, sendList, receivedList))
+        print("Process {} of {} on {} computed {} and received {}"\
+        .format(id, numProcesses, myHostName, sendList, receivedList))
 
     else :
         if id == 0:
-            print("Please run this program with the number of processes positive and even")
+            print("Please run this program with the number of processes \
+positive and even")
 
 ########## Run the main function
 main()

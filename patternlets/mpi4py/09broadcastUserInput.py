@@ -51,20 +51,24 @@ def main():
         if id == 0:        # master
             #master: get the command line argument
             data = sys.argv[1]
-            print("Master Process {} of {} on {} broadcasts \"{}\"".format(id, numProcesses, myHostName, data))
+            print("Master Process {} of {} on {} broadcasts \"{}\""\
+            .format(id, numProcesses, myHostName, data))
 
         else :
             # worker: start with empty data
             data = 'No data'
-            print("Worker Process {} of {} on {} starts with \"{}\"".format(id, numProcesses, myHostName, data))
+            print("Worker Process {} of {} on {} starts with \"{}\""\
+            .format(id, numProcesses, myHostName, data))
 
         #initiate and complete the broadcast
         data = comm.bcast(data, root=0)
         #check the result
-        print("Process {} of {} on {} has \"{}\" after the broadcast".format(id, numProcesses, myHostName, data))
+        print("Process {} of {} on {} has \"{}\" after the broadcast"\
+        .format(id, numProcesses, myHostName, data))
 
     else :
-        print("Please run this program with the number of processes greater than 1")
+        print("Please run this program with the number of processes \
+greater than 1")
 
 ########## Run the main function
 main()

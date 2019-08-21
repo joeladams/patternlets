@@ -31,12 +31,14 @@ def main():
         start = id * chunkSize
         stop = start + chunkSize
         for i in range(start, stop):
-            print("On {}: Process {} is performing iteration {}".format(myHostName, id, i))
+            print("On {}: Process {} is performing iteration {}"\
+            .format(myHostName, id, i))
 
     else:
         # cannot break into equal chunks; one process reports the error
         if id == 0 :
-            print("Please run with number of processes divisible by and less than or equal to {}.".format(REPS))
+            print("Please run with number of processes divisible by \
+and less than or equal to {}.".format(REPS))
 
 ########## Run the main function
 main()

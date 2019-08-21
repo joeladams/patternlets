@@ -34,10 +34,12 @@ def main():
             sendList = [id]
             # send to the first worker
             comm.send(sendList, dest=id+1)
-            print("Master Process {} of {} on {} sent {}".format(id, numProcesses, myHostName, sendList))
+            print("Master Process {} of {} on {} sent {}"\
+            .format(id, numProcesses, myHostName, sendList))
             # receive from the last worker
             receivedList = comm.recv(source=numProcesses-1)
-            print("Master Process {} of {} on {} received {}".format(id, numProcesses, myHostName, receivedList))
+            print("Master Process {} of {} on {} received {}"\
+            .format(id, numProcesses, myHostName, receivedList))
         else :
             # worker: receive from any source
             receivedList = comm.recv(source=id-1)
@@ -46,10 +48,12 @@ def main():
             sendList = receivedList + [id]
             comm.send(sendList, dest=(id+1) % numProcesses)
 
-            print("Worker Process {} of {} on {} received {} and sent {}".format(id, numProcesses, myHostName, receivedList, sendList))
+            print("Worker Process {} of {} on {} received {} and sent {}"\
+            .format(id, numProcesses, myHostName, receivedList, sendList))
 
     else :
-        print("Please run this program with the number of processes greater than 1")
+        print("Please run this program with the number of processes \
+greater than 1")
 
 ########## Run the main function
 main()
