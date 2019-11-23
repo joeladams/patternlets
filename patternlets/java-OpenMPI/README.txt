@@ -10,7 +10,10 @@ To use it, OpenMPI must be installed from source, not via a binary package.
 	./configure --prefix=/usr/local  --enable-mpi-java
 5. Run: 
 	make all install
+6. If you then download this repo, you should be able to 'cd' into
+    any of its folders, enter 'make' to build the patternlet, and
+    then enter 'run' to run the patternlet.
 
-See below for more info:
+See the following for more info about installing OpenMPI:
 	https://www.open-mpi.org/faq/?category=java
 
