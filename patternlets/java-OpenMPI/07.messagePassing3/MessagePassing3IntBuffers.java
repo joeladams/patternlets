@@ -3,9 +3,9 @@
  *      in combination with the master-worker pattern.
  *
  * Goal: The master process sends its id to process 1
- *        and receives an array of ids from process N-1.
- *       Every other process i receives an array of ids from process i-1,
- *        appends its id to the array, and sends the array to process (i+1)%N.
+ *        and receives a buffer of ids from process N-1.
+ *       Every other process i receives a buffer of ids from process i-1,
+ *        appends its id to the buffer, and sends the buffer to process (i+1)%N.
  *
  * Joel Adams, Calvin University, November 2019,
  *
@@ -17,6 +17,7 @@
  */
 
 import mpi.*;
+import java.nio.IntBuffer;
 
 public class MessagePassing3 {
 
@@ -35,62 +36,63 @@ public class MessagePassing3 {
         System.exit(0);
     } 
 
-    int [] sendArray = new int[ARRAY_SIZE];            // allocate arrays
-    int [] receiveArray = new int [ARRAY_SIZE];
-    int numValuesRecvd = 0;
+    IntBuffer sendBuf = MPI.newIntBuffer(BUFFER_MAX);
+    IntBuffer receiveBuf = MPI.newIntBuffer(BUFFER_MAX);
     Status status;
 
     if ( id == MASTER ) {                              // MASTER:
-        sendArray[0] = id;                             // 1. put id in the array
-        comm.send(sendArray,                           // 2. send: array,
+        sendBuf.put(0, id);                            // 1. put id in buffer
+        comm.send(sendBuf,                             // 2. send: buffer,
                         1,                             //          number of values,
                         MPI.INT,                       //          type of values,
                         id+1,                          //          destination id,
-                        0);                            //          tag
-        status = comm.recv(receiveArray,               // 3. recv: array,
-                            ARRAY_SIZE,                //          array capacity,
+                        0);                            //          tag.
+        status = comm.recv(receiveBuf,                 // 3. recv: buffer,
+                            BUFFER_MAX,                //          buffer capacity,
                             MPI.INT,                   //          type of values,
                             numProcesses-1,            //          sender id,
-                            0);                        //          tag
-        numValuesRecvd = status.getCount(MPI.INT);     // 4. how many ints did we get?
-        output(receiveArray, numValuesRecvd);          // 5. output what we got
+                            0);                        //          tag.
+        int valuesReceived = status.getCount(MPI.INT); // 4. how many did we get?
+        output(receiveBuf, valuesReceived);            // 5. output what we got.
     } else {                                           // WORKERS:
-        status = comm.recv(receiveArray,               // 1. receive: array,
-                            ARRAY_SIZE,                //             array capacity,
+        status = comm.recv(receiveBuf,                 // 1. receive: buffer,
+                            BUFFER_MAX,                //             buffer capacity,
                             MPI.INT,                   //             type of values,
                             id-1,                      //             sender id,
-                             0);                       //             tag
-        numValuesRecvd = status.getCount(MPI.INT);     // 2. how many ints did we get?
-        output(receiveArray, numValuesRecvd);          // 3. output what we got
-        receiveArray[numValuesRecvd] = id;             // 4. append id to buffer
-        comm.send(receiveArray,                        // 5. send: buffer,
-                   numValuesRecvd+1,                   //          number of values,
+                             0);                       //             tag.
+        int valuesReceived = status.getCount(MPI.INT); // 2. how many did we get?
+        output(receiveBuf, valuesReceived);            // 3. output what we got.
+        receiveBuf.put(valuesReceived, id);            // 4. append id to buffer
+        comm.send(receiveBuf,                          // 5. send: buffer,
+                   valuesReceived+1,                   //          number of values,
                    MPI.INT,                            //          type of values,
                    (id+1) % numProcesses,              //          destination id,
-                    0);                                //          tag
+                    0);                                //          tag.
     }
 
     MPI.Finalize();
   }
 
-  /* utility to print an array with useful labels.
-   * @param: arr, an array.
-   * @param: size, the number of ints in the array.
+  /* utility to print an IntBuffer with useful labels..
+   * @param: buf, an IntBuffer.
+   * @param: size, the number of ints in IntBuffer
+   *          (b/c IntBuffer has no length() method,
+   *            whose bright idea was that?).
    * POST: The ints in buf have been displayed on System.out,
    *        preceded by spaces, and with a newline at the end.
    */
-  private static void output(int [] arr, int size) throws MPIException {
+  private static void output(IntBuffer buf, int size) throws MPIException {
       System.out.printf("Process %d of %d received:",
                           MPI.COMM_WORLD.getRank(),
                           MPI.COMM_WORLD.getSize());
       for (int i = 0; i < size; ++i) {
           System.out.print( " " );
-          System.out.print( arr[i] );
+          System.out.print( buf.get(i) );
       }
       System.out.print("\n");
   }
 
   private static final int MASTER = 0;
-  private static final int ARRAY_SIZE = 256;
+  private static final int BUFFER_MAX = 256;
 }
 
