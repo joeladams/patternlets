@@ -13,7 +13,7 @@
  * Usage: mpirun -np 4 java ./Broadcast
  *
  * Exercise:
- * - Compile and run several times,
+ * - Compile, then run several times,
  *     using 2, 4, and 8 processes
  * - Use source code to trace execution and output
  *     (noting contents of file "data.txt");
@@ -45,9 +45,7 @@ public class Broadcast {
                        + "'s answer is: " + answerBuf.get(0) + "\n";
     System.out.print(beforeMsg);               // all: output 'before' values
 
-    if ( id == MASTER) {                       // MASTER: separate 'before' from  'after'
-        System.out.println("----");
-    }
+    printSeparator("----", id);
 
     comm.bcast(answerBuf, 1, MPI.INT, 0);      // all: participate in broadcast
 
@@ -84,7 +82,18 @@ public class Broadcast {
         scanner.close();                                // 4. clean up and return
 
         return intValue;
-    } 
+  } 
+
+  /* utility to print a separator string between the 'before' and 'after' parts.
+   * @param: separator, a String.
+   * @param: id, the rank of this MPI process.
+   * POST: the master has printed the separator to System.out.
+   */
+  public static void printSeparator(String separator, int id) throws MPIException {
+     MPI.COMM_WORLD.barrier();
+     if (id == MASTER) { System.out.println(separator); }
+     MPI.COMM_WORLD.barrier();
+  }
 
   private static final int MASTER = 0;
 }

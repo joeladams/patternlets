@@ -45,7 +45,7 @@ public class SendReceivePseudoBroadcast {
         comm.recv(array, ARRAY_SIZE, MPI.INT, MASTER, 0); 
     }
 
-    printSeparator(id, "----");
+    printSeparator("----", id);
 
     print("AFTER:", id, array);   // everyone print what they have
 
@@ -81,7 +81,7 @@ public class SendReceivePseudoBroadcast {
    * @param: separator, a String.
    * POST: separator has been printed.
    */
-  private static void printSeparator(int id, String separator) throws MPIException {
+  private static void printSeparator(String separator, int id) throws MPIException {
      MPI.COMM_WORLD.barrier();
      if (id == 0) { System.out.println(separator); }
      MPI.COMM_WORLD.barrier();

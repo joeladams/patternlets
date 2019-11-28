@@ -46,6 +46,8 @@ public class BroadcastUserInput {
 
     comm.bcast(answerBuf, 1, MPI.INT, 0);      // all: participate in broadcast
 
+    printSeparator("----", id);
+
     String afterMsg = "AFTER the broadcast, the answer of process " + id
                        + " on host " + hostName 
                        + " is: " + answerBuf.get(0) + "\n";
@@ -72,6 +74,18 @@ public class BroadcastUserInput {
         }
         buf.put(result);
     } 
+
+  /* utility to print a separator between the 'before' and 'after' parts.
+   * @param: separator, a String.
+   * @param: id, the rank of this MPI process.
+   * POST: separator has been printed to System.out.
+   */
+  public static void printSeparator(String separator, int id) throws MPIException {
+     MPI.COMM_WORLD.barrier();
+     if (id == MASTER) { System.out.println(separator); }
+     MPI.COMM_WORLD.barrier();
+  }
+
 
   private static final int MASTER = 0;
 }
