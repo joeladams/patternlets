@@ -1,27 +1,23 @@
-/* MessagePassing.java
- * ... illustrates how use of MPI's send and receive commands
- *      can lead to deadlock.
+/* MessagePassingDeadlock.java
+ * ... illustrates deadlock with MPI send and receive commands,
+ *      using OpenMPI's Java interface.
  *
  * Goal: Have MPI processes pair up and exchange their id numbers.
  *
- * Note: Values are sent/received in Java using arrays or buffers.
- *       Buffers are preferred b/c they work for all communication calls.
+ * Note: In Java, messages are passed via arrays or buffers.
  *
  * Joel Adams, Calvin University, November 2019,
- *  with error-handling from Hannah Sonsalla, Macalester College 2017.
+ *  based on work by Hannah Sonsalla, Macalester College 2017.
  *
- * Usage: mpirun -np 4 java ./MessagePassing
+ * Usage: mpirun -np 4 java ./MessagePassingDeadlock
  *
  * Exercise:
- * - Compile, then run using 1 process, then 2 processes.
- *    (Use Cntl-c to terminate.)
+ * - Compile and run, using more than one process.
  * - Use source code to trace execution.
  * - Why does this fail?
-
  */
 
 import mpi.*;
-import java.nio.IntBuffer;
 
 public class MessagePassingDeadlock {
 
@@ -37,20 +33,21 @@ public class MessagePassingDeadlock {
             System.out.print("\nPlease run this program using -np N where N is positive and even.\n\n");
         }
     } else {
-        IntBuffer sendBuf = MPI.newIntBuffer(1);
-        sendBuf.put(id);
-        IntBuffer receiveBuf = MPI.newIntBuffer(1);
+        int [] sendValue = new int[1];     // create length-1 int arrays for sending
+        sendValue[0] = id;
+        int [] receivedValue = new int[1]; //  and receiving
+        Status status;
 
         if ( odd(id) ) { // odd processes receive from their 'left' neighbor, then send
-            comm.recv(receiveBuf, 1, MPI.INT, id-1, 0); 
-            comm.send(sendBuf, 1, MPI.INT, id-1, 0);
+            status = comm.recv(receivedValue, 1, MPI.INT, id-1, 0); 
+            comm.send(sendValue, 1, MPI.INT, id-1, 0);
         } else {         // even processes receive from their 'right' neighbor, then send
-            comm.recv(receiveBuf, 1, MPI.INT, id+1, 0); 
-            comm.send(sendBuf, 1, MPI.INT, id+1, 0);
+            status = comm.recv(receivedValue, 1, MPI.INT, id+1, 0); 
+            comm.send(sendValue, 1, MPI.INT, id+1, 0);
         }
 
-        String message = "Process " + id + " sent '" + sendBuf.get(0)
-                         + "' and received '" + receiveBuf.get(0) + "'\n";
+        String message = "Process " + id + " computed " + sendValue[0]
+                         + " and received " + receivedValue[0] + "\n";
         System.out.print(message);
     }
 
