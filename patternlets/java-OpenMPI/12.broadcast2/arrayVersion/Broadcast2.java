@@ -1,11 +1,11 @@
 /* Broadcast2.java
  * ... illustrates the use of MPI's broadcast command with multiple values.
  *
- * Note: This version uses an IntBuffer to store the values.
+ * Note: This version uses an array to store the values.
  *
- * Goal: The master process fills an IntBuffer with values
+ * Goal: The master process fills an array with values
  *        and broadcasts it to all the other processes.
- *       Each process outputs its buffer's values before and after
+ *       Each process outputs its array before and after
  *        the broadcast.
  *
  * Joel Adams, Calvin University, November 2019,
@@ -19,7 +19,6 @@
  * - Explain behavior/effect of MPI_Bcast().
  */
 
-import java.nio.IntBuffer;
 import mpi.*;
 
 public class Broadcast2 {
@@ -30,45 +29,45 @@ public class Broadcast2 {
     Comm comm         = MPI.COMM_WORLD;
     int id            = comm.getRank();
 
-    IntBuffer buffer = MPI.newIntBuffer(BUFFER_SIZE);  // all: allocate buffers
+    int [] array = new int[ARRAY_SIZE];            // all: allocate array 
 
-    if ( id == MASTER ) {                              // MASTER: fill its buffer
-        fill(buffer);
+    if ( id == MASTER ) {                          // MASTER: fill its array
+        fill(array);
     }
 
-    print("BEFORE", id, buffer);                       // all: print buffers before
+    print("BEFORE", id, array);                    // all: print buffers before
 
     printSeparator("----", id, comm);
 
-    comm.bcast(buffer, buffer.capacity(), MPI.INT, 0); // all: participate in broadcast
+    comm.bcast(array, array.length, MPI.INT, 0);   // all: participate in broadcast
 
-    print("AFTER", id, buffer);                        // all: print buffers after
+    print("AFTER", id, array);                     // all: print buffers after
 
     MPI.Finalize();
   }
 
 
-  /* utility to fill a Buffer with some values.
-   * @param: buf, an IntBuffer.
-   * POST: buf has been filled with int values.
+  /* utility to fill an array with some values.
+   * @param: a, an int array.
+   * POST: a has been filled with int values.
    */
-  private static void fill(IntBuffer buf) {
-     for (int i = 0; i < buf.capacity(); ++i) {
-         buf.put(i, i + 11);
+  private static void fill(int [] a) {
+     for (int i = 0; i < a.length; ++i) {
+         a[i] = i + 11;
      }
   }
 
   /* utility to print a buffer with descriptive labels.
    * @param: label, a String.
    * @param: id, this process's MPI rank.
-   * @param, buf, an IntBuffer.
-   * POST: label, id, and buf have been displayed via System.out.
+   * @param, a, an int array.
+   * POST: label, id, and a have been displayed via System.out.
    */
-  private static void print(String label, int id, IntBuffer buf) {
+  private static void print(String label, int id, int [] a) {
     String msg = label + " the broadcast, process " + id
-                       + "'s buffer contains:";
-    for (int i = 0; i < buf.capacity(); ++i) {
-      msg += (" " + buf.get(i));
+                       + "'s array contains:";
+    for (int i = 0; i < a.length; ++i) {
+      msg += (" " + a[i]);
     }
     msg += "\n";
     System.out.print(msg); 
@@ -88,6 +87,6 @@ public class Broadcast2 {
   }
 
   private static final int MASTER = 0;
-  private static final int BUFFER_SIZE = 8;
+  private static final int ARRAY_SIZE = 8;
 }
 
