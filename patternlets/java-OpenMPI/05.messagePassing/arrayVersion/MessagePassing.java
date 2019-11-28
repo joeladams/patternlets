@@ -5,7 +5,6 @@
  * Goal: Have MPI processes pair up and exchange their id numbers.
  *
  * Note: Values are sent/received in Java using arrays or buffers.
- *       Buffers are preferred b/c they work for all communication calls.
  *
  * Joel Adams, Calvin University, November 2019,
  *  with error-handling from Hannah Sonsalla, Macalester College 2017.
@@ -23,7 +22,6 @@
  */
 
 import mpi.*;
-import java.nio.IntBuffer;
 
 public class MessagePassing {
 
@@ -39,20 +37,21 @@ public class MessagePassing {
             System.out.print("\nPlease run this program using -np N where N is positive and even.\n\n");
         }
     } else {
-        IntBuffer sendBuf = MPI.newIntBuffer(1);
-        sendBuf.put(id);
-        IntBuffer receiveBuf = MPI.newIntBuffer(1);
+        int [] sendValue = new int[1];
+        sendValue[0] = id;
+        int [] receivedValue = new int[1]; 
+        Status status;
 
         if ( odd(id) ) { // odd processes send, then receive
-            comm.send(sendBuf, 1, MPI.INT, id-1, 0);
-            comm.recv(receiveBuf, 1, MPI.INT, id-1, 0); 
+            comm.send(sendValue, 1, MPI.INT, id-1, 0);
+            status = comm.recv(receivedValue, 1, MPI.INT, id-1, 0); 
         } else {         // even processes receive then send
-            comm.recv(receiveBuf, 1, MPI.INT, id+1, 0); 
-            comm.send(sendBuf, 1, MPI.INT, id+1, 0);
+            status = comm.recv(receivedValue, 1, MPI.INT, id+1, 0); 
+            comm.send(sendValue, 1, MPI.INT, id+1, 0);
         }
 
-        String message = "Process " + id + " sent '" + sendBuf.get(0)
-                         + "' and received '" + receiveBuf.get(0) + "'\n";
+        String message = "Process " + id + " computed " + sendValue[0]
+                         + " and received " + receivedValue[0] + "\n";
         System.out.print(message);
     }
 

@@ -1,12 +1,12 @@
-/* MessagePassing2.java
+/* MessagePassing2Arrays.java
  * ... illustrates the use of MPI's send and receive commands
- *      to send Strings using CharBuffers,
+ *      to send Strings using char-arrays,
  *      using OpenMPI's Java interface.
  *
  * Goal: Have MPI processes pair up and exchange their host-names.
  *
  * Note: Values are sent/received in Java using arrays or buffers.
- *       This example uses chars but the same approach works with numbers.
+ *       This example uses char-arrays; the same approach works with numbers.
  *
  * Joel Adams, Calvin University, November 2019,
  *  error-handling adapted from Hannah Sonsalla, Macalester College 2017.
@@ -20,7 +20,6 @@
  */
 
 import mpi.*;
-import java.nio.CharBuffer;
 
 public class MessagePassing2 {
 
@@ -40,25 +39,20 @@ public class MessagePassing2 {
     } 
 
     String hostName   = MPI.getProcessorName();
-    CharBuffer sendBuf = MPI.newCharBuffer(BUFFER_MAX);
-    //sendBuf.put(hostName);  // this is supposed to work but doesn't for me,
-                              // (UTF-16 vs UTF-8?) so we'll do it the hard way
-    for (int i = 0; i < hostName.length(); ++i) {
-         sendBuf.put(i, hostName.charAt(i));
-    }
-    CharBuffer receiveBuf = MPI.newCharBuffer(BUFFER_MAX);
+    char [] sendChars = hostName.toCharArray();
+    char [] receivedChars = new char[BUFFER_MAX]; 
     Status status;
 
     if ( odd(id) ) { // odd processes send, then receive
-        comm.send(sendBuf, sendBuf.length(), MPI.CHAR, id-1, 0);
-        status = comm.recv(receiveBuf, BUFFER_MAX, MPI.CHAR, id-1, 0); 
-    } else {         // even processes receive then send
-        status = comm.recv(receiveBuf, BUFFER_MAX, MPI.CHAR, id+1, 0); 
-        comm.send(sendBuf, sendBuf.length(), MPI.CHAR, id+1, 0);
+        comm.send(sendChars, sendChars.length, MPI.CHAR, id-1, 0);
+        status = comm.recv(receivedChars, BUFFER_MAX, MPI.CHAR, id-1, 0); 
+    } else {         // even processes receive, then send
+        status = comm.recv(receivedChars, BUFFER_MAX, MPI.CHAR, id+1, 0); 
+        comm.send(sendChars, sendChars.length, MPI.CHAR, id+1, 0);
     }
 
-    String sentString = sendBuf.toString();
-    String receivedString = receiveBuf.toString();
+    String sentString = String.valueOf(sendChars);
+    String receivedString = String.valueOf(receivedChars);
     String message = "Process " + id + " computed " + sentString
                       + " and received " + receivedString + "\n";
     System.out.print(message);
