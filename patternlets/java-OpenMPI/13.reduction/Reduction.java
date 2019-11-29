@@ -1,6 +1,7 @@
 /* Reduction.java
- * ... illustrates the reduction pattern using
- *      OpenMPI's Java interface.
+ * ... illustrates how to use the reduction pattern 
+ *     (which combines distributed values in O(lg(P)) time)
+ *      using OpenMPI's Java interface.
  *
  * Joel Adams, Calvin University, November 2019.
  *
