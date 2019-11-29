@@ -6,8 +6,6 @@
  *
  * Exercise:
  * - Compile and run, comparing output to source code.
- * - Uncomment the 'commented out' call to printArray.
- * - Save, recompile, rerun, comparing output to source code.
  * - Explain behavior of MPI_Reduce() in terms of
  *     srcArr and destArr.
  */
@@ -18,6 +16,7 @@
 #define ARRAY_SIZE 5
 
 void printArray(int id, char* arrayName, int* array, int SIZE);
+void printSeparator(char* separator, int id);
 
 int main(int argc, char** argv) {
     int myRank = -1;
@@ -36,7 +35,9 @@ int main(int argc, char** argv) {
         srcArr[i] = myRank * i;
     }
 
-   printArray(myRank, "srcArr", srcArr, ARRAY_SIZE);
+    printSeparator("", myRank);
+    printArray(myRank, "srcArr", srcArr, ARRAY_SIZE);
+    printSeparator("----", myRank);
 
     MPI_Reduce(srcArr, destArr, ARRAY_SIZE, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
@@ -67,3 +68,16 @@ void printArray(int id, char* arrayName, int * array, int SIZE) {
     }
     printf("]\n");
 }
+
+/* utility to print a separator string between before and after sections.
+ * params: separator, a string
+ *         id, the rank of the current process.
+ * postcondition: the master process has printed the separator.
+ */
+void printSeparator(char* separator, int id) {
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (id == 0) { printf("%s", separator); }
+    MPI_Barrier(MPI_COMM_WORLD);
+}
+
+
