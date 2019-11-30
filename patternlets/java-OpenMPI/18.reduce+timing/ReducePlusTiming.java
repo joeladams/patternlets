@@ -2,7 +2,8 @@
  * ... illustrates how a Reduction can be used to 
  *      compute the collective time to solve a problem.
  *
- * Joel Adams, Calvin University, November 2019.
+ * Joel Adams, Calvin University, November 2019,
+ *  using logic from Hannah Sonsalla, Macalester College 2017.
  *
  * Usage: mpirun -np 10 java ./ReducePlusTiming
  *
