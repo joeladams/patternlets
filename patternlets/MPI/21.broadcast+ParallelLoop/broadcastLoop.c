@@ -28,10 +28,10 @@
 *                { 11, 12, 13, ... }.
 */
 void fill(int* a, int size) {
-	int i;
-	for (i = 0; i < size; i++) {
-		a[i] = i+11;
-	}
+    int i;
+    for (i = 0; i < size; i++) {
+        a[i] = i+11;
+    }
 }
 
 /*
@@ -57,19 +57,18 @@ void fill(int* a, int size) {
 */
 void workOnChunk(int reps, int numProcesses, int id, int* array, int* myChunk) {
 
-	int chunkSize = reps / numProcesses;      // find chunk size
-	int start = id * chunkSize;               // find starting index
-	int stop = start + chunkSize;             // find stopping index
+    int chunkSize = reps / numProcesses;      // find chunk size
+    int start = id * chunkSize;               // find starting index
+    int stop = start + chunkSize;             // find stopping index
 
-	int chunkIndex = 0;
-	for (int i = start; i < stop; i++) {     // iterate through our range
-		printf("Process %d is performing iteration %d\n", id, i);
-		// perform calculation, leaving original array intact and updating
-		// local chunk with result.
-		myChunk[chunkIndex] = array[i] *2;
-		chunkIndex++;
-	}
-
+    int chunkIndex = 0;
+    for (int i = start; i < stop; i++) {     // iterate through our range
+        printf("Process %d is performing iteration %d\n", id, i);
+        // perform calculation, leaving original array intact and updating
+        // local chunk with result.
+        myChunk[chunkIndex] = array[i] *2;
+        chunkIndex++;
+    }
 }
 
 
@@ -83,11 +82,11 @@ void workOnChunk(int reps, int numProcesses, int id, int* array, int* myChunk) {
 * Postcondition: str, id, and a have all been written to stdout.
 */
 void print(char* str, int id, int* a, int numElements) {
-	printf("%s , process %d has: {", str, id);
-	for (int i = 0; i < numElements - 1; i++) {
-		printf("%d, ", a[i]);
-	}
-	printf("%d}\n", a[numElements - 1]);
+    printf("%s , process %d has: {", str, id);
+    for (int i = 0; i < numElements - 1; i++) {
+        printf("%d, ", a[i]);
+    }
+    printf("%d}\n", a[numElements - 1]);
 }
 
 #define MAX 8
@@ -97,52 +96,50 @@ void print(char* str, int id, int* a, int numElements) {
 *  equally among processes.
 */
 int main(int argc, char** argv) {
-	int array[MAX] = {0};
-	int* myChunk;
-	int* gatherArray;
-	int numProcs, myRank;
+    int array[MAX] = {0};
+    int* myChunk = NULL;
+    int* gatherArray = NULL;
+    int numProcs = -1, myRank = -1;
 
-	MPI_Init(&argc, &argv);
-	MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
-	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 
-	// need conditions for  equal-sized chunks
-	if ((MAX % numProcs) == 0 && numProcs <= MAX) {
+    // check conditions for  equal-sized chunks
+    if ((MAX % numProcs) == 0 && numProcs <= MAX) {
+        if (myRank == 0) {     // master:
+            fill(array, MAX);                                 // populate original array
+            gatherArray = (int*) malloc( MAX * sizeof(int) ); // allocate result array
+        }
 
-		if (myRank == 0) {     // master:
-			fill(array, MAX);                              // populates original array
-			gatherArray = (int*) malloc( MAX * sizeof(int) ); // allocates result array
-		}
+        print("BEFORE Bcast", myRank, array, MAX);
 
-		print("BEFORE Bcast", myRank, array, MAX);
+        MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
 
-		MPI_Bcast(array, MAX, MPI_INT, 0, MPI_COMM_WORLD);
+        print("AFTER Bcast", myRank, array, MAX);
 
-		print("AFTER Bcast", myRank, array, MAX);
+        myChunk = (int*) malloc(MAX/numProcs * sizeof(int));  // holds my work
+        workOnChunk(MAX, numProcs, myRank, array, myChunk);
 
-		myChunk = (int*) malloc(MAX/numProcs * sizeof(int));  // holds my work
-		workOnChunk(MAX, numProcs, myRank, array, myChunk);
+        print("AFTER doubling", myRank, array, MAX);          //array should not change
 
-		print("AFTER doubling", myRank, array, MAX);          //array should not change
+        MPI_Barrier(MPI_COMM_WORLD);                          // ensure all are finished
 
-		MPI_Barrier(MPI_COMM_WORLD);                     // ensure all are finished
+        MPI_Gather(myChunk, MAX/numProcs, MPI_INT,            //  gather chunk vals
+                    gatherArray, MAX/numProcs, MPI_INT,       //   into gatherArray
+                    0, MPI_COMM_WORLD);
 
-		MPI_Gather(myChunk, MAX/numProcs, MPI_INT,         //  gather chunk vals
-			gatherArray, MAX/numProcs, MPI_INT,    //   into gatherArray
-			0, MPI_COMM_WORLD);
+        if (myRank == 0) {                                    // master has everything
+            print("in gatherArray, AFTER gather", myRank, gatherArray, MAX);
+            free(gatherArray);                                //clean up
+        }
+    } else {                                                  // bail if unequal chunks
+        if (myRank == 0) {
+            printf("Please run with -np divisible by and less than or equal to %d\n.", MAX);
+        }
+    }
 
-			if (myRank == 0) {  // master has all completed work after gather:
-				print("in gatherArray, AFTER gather", myRank, gatherArray, MAX);
-				free(gatherArray);  //clean up
-			}
-
-		} else {   // bail if not equal-sized chunks
-			if (myRank == 0) {
-				printf("Please run with -np divisible by and less than or equal to %d\n.", MAX);
-			}
-		}
-
-		free(myChunk);  // clean up
-		MPI_Finalize();
-		return 0;
-	}
+    free(myChunk);                                            // clean up
+    MPI_Finalize();
+    return 0;
+}
