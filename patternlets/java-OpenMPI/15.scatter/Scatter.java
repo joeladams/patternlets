@@ -14,6 +14,7 @@
  * - Compile, then run with N = 1, 2, 4, 8. 
  * - Trace execution through source code. 
  * - Explain behavior/effect of scatter. 
+ * - What if BUFFER_SIZE is not evenly divisible by N?
  */
 
 import mpi.*;
