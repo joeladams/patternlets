@@ -13,6 +13,8 @@
  * - Change REPS to 16, save, recompile, rerun, varying N again.
  * - Explain how this pattern divides the iterations of the loop
  *    among the processes.
+ * - What if REPS is not evenly divisible by N?
+ *    What would be a better way to handle that case?
  */
 
 import mpi.*;
