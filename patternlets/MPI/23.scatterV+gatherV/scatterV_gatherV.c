@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 
     MPI_Gatherv(chunkArray, chunkSize, MPI_INT,                   //  gather chunks
                 gatherArray, chunkSizeArray, offsetArray, MPI_INT, //   into gatherArray
-                0, MPI_COMM_WORLD);
+                MASTER, MPI_COMM_WORLD);
 
     print("AFTER gather", myRank, "gatherArray", gatherArray, ARRAY_SIZE);
 
