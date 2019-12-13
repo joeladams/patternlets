@@ -15,5 +15,10 @@ To use it, OpenMPI must be installed from source, not via a binary package.
     then enter 'run' to run the patternlet.
 
 See the following for more info about installing OpenMPI:
+
 	https://www.open-mpi.org/faq/?category=java
+
+and the 'java' folder at the following site the Java classes' details:
+
+        https://github.com/open-mpi/ompi/tree/master/ompi/mpi/java
 
