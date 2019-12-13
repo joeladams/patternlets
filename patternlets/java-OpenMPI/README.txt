@@ -20,5 +20,5 @@ See the following for more info about installing OpenMPI:
 
 and the 'java' folder at the following site the Java classes' details:
 
-        https://github.com/open-mpi/ompi/tree/master/ompi/mpi/java
+	https://github.com/open-mpi/ompi/tree/master/ompi/mpi/java
 
