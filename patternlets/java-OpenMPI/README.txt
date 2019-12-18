@@ -12,7 +12,7 @@ To use it, OpenMPI must be installed from source, not via a binary package.
 	make all install
 6. If you then download this repo, you should be able to 'cd' into
     any of its folders, enter 'make' to build the patternlet, and
-    then enter 'run' to run the patternlet.
+    then enter './run' to run the patternlet.
 
 See the following for more info about installing OpenMPI:
 
