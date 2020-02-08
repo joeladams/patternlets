@@ -25,7 +25,7 @@ from mpi4py import MPI
 import numpy as np
 
 
-# Create a list of lists to be scattered.
+# Create a 2D matrix to be scattered.
 def genArray(numProcesses, numElementsPerProcess):
 
     data = np.linspace(1, #start
