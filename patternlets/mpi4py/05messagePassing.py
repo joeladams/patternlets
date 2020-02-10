@@ -41,11 +41,11 @@ def main():
     if numProcesses > 1 and not odd(numProcesses):
         sendValue = id
         if odd(id):
-            #odd processes send to their 'left neighbor', then receive from
+            #odd processes send to their paired 'neighbor', then receive from
             comm.send(sendValue, dest=id-1)
             receivedValue = comm.recv(source=id-1)
         else :
-            #even processes receive from their 'right neighbor', then send
+            #even processes receive from their paired 'neighbor', then send
             receivedValue = comm.recv(source=id+1)
             comm.send(sendValue, dest=id+1)
 

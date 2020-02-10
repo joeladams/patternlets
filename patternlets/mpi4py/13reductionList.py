@@ -38,7 +38,6 @@ def main():
     myHostName = MPI.Get_processor_name()  #machine name running the code
 
     srcList = [1*id, 2*id, 3*id, 4*id, 5*id]
-    destList = [0, 0, 0, 0, 0]
 
     destListMax = comm.reduce(srcList, op=MPI.MAX)
     destListSum = comm.reduce(srcList, op=MPI.SUM)

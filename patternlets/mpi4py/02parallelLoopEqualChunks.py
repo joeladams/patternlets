@@ -27,9 +27,12 @@ def main():
     REPS = 8
 
     if ((REPS % numProcesses) == 0 and numProcesses <= REPS):
+        # How much of the loop should a process work on?
         chunkSize = int(REPS / numProcesses)
         start = id * chunkSize
         stop = start + chunkSize
+
+        # do the work within the range set aside for this process
         for i in range(start, stop):
             print("On {}: Process {} is performing iteration {}"\
             .format(myHostName, id, i))
