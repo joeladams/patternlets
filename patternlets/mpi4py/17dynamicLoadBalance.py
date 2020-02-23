@@ -77,8 +77,9 @@ def handOutWork(workTimes, comm, numProcesses):
         #send next work
         comm.send(workTimes[workcount], dest=workerId, tag=WORKTAG)
         workcount += 1
+        print("master sent {} to {}".format(work, workerId), flush=True)
 
-    # Receive results for outstanding work requests. (non-blocking?)
+    # Receive results for outstanding work requests.
     while (recvcount < totalWork):
         stat = MPI.Status()
         workTime = comm.recv(source=MPI.ANY_SOURCE, status=stat)
