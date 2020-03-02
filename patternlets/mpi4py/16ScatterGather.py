@@ -6,7 +6,7 @@
 #  Libby Shoop, Macalester College, January 2020
 #
 # Example usage:
-#      python run.py ./16Scattter.py N
+#      python run.py ./16ScatterGather.py N
 #  Here the N signifies the number of processes to start up in mpi.
 #
 #  run.py executes this program within mpirun using
@@ -25,7 +25,7 @@ from mpi4py import MPI
 import numpy as np
 
 
-# Create a 2D matrix to be scattered.
+# Create a 1D array to be scattered.
 def genArray(numProcesses, numElementsPerProcess):
 
     data = np.linspace(1, #start

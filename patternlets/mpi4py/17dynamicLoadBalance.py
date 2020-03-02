@@ -27,8 +27,8 @@ import numpy as np
 import time
 
 def genTasks(numTasks):
-    np.random.seed(0)  # run the same set of timed tasks
-    return np.random.randint(low=1, high=7, size=numTasks)
+    np.random.seed(1000)  # run the same set of timed tasks
+    return np.random.randint(low=1, high=9, size=numTasks)
 
 # tags that can be applied to messages
 WORKTAG = 1

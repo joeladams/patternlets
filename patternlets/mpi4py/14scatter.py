@@ -5,7 +5,7 @@
 #  Libby Shoop, Macalester College, July 2019
 #
 # Example usage:
-#      python run.py ./14scattter.py N
+#      python run.py ./14scatter.py N
 #  Here the N signifies the number of processes to start up in mpi.
 #
 #  run.py executes this program within mpirun using
