@@ -61,8 +61,8 @@ public class Barrier {
                                         String hostName, String position)
                                          throws MPIException
   {
-      CharBuffer buffer = MPI.newCharBuffer(BUF_SIZE);
       if ( id != MASTER ) {     // Workers: build & send a message to the Master
+          CharBuffer buffer = MPI.newCharBuffer(BUF_SIZE);
           String msg = "Process " + id + " of " + numProcesses
                        + " on " + hostName + " is " + position
                        + " the barrier.";
@@ -70,6 +70,7 @@ public class Barrier {
           MPI.COMM_WORLD.send(buffer, msg.length(), MPI.CHAR, 0, 0);
       } else {                  // Master: recv & print msg from each Worker
           for (int i = 1; i < numProcesses; ++i) {
+              CharBuffer buffer = MPI.newCharBuffer(BUF_SIZE);
               MPI.COMM_WORLD.recv(buffer, BUF_SIZE, MPI.CHAR,
                                    MPI.ANY_SOURCE, MPI.ANY_TAG);
               System.out.println( buffer.toString() );
@@ -78,6 +79,6 @@ public class Barrier {
   }
 
   private static final int BUF_SIZE = 128;
-  private static final int MASTER = 0;
+  private static final int MASTER   = 0;
 }
 
