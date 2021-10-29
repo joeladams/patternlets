@@ -2,10 +2,10 @@
  * ... illustrates the use of OpenMP's parallel task directives,
  *      which can be used for task parallelism...
  *
- * Creator, Rud van der Pas, SC13, Nov 2013.
- * Adapted by: Joel Adams, Calvin University, Nov 2021.
+ * Joel Adams, Calvin University, Nov 2021.
  *
- * Usage: ./tasks [numThreads]
+ * Usage: ./tasks
+ *   or:  ./run.sh
  *
  * Exercise: 
  *  Discussing each step with your neighbor...
