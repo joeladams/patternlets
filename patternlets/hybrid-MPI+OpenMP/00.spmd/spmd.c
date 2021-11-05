@@ -30,7 +30,8 @@ int main(int argc, char** argv) {
                                       MPI_THREAD_FUNNELED, 
                                       &threadSupportLevel);
         if (result != MPI_SUCCESS) {
-           fprintf(stderr, "\nMPI+multithreading not supported\n\n");
+           fprintf(stderr, "\nMPI+multithreading not supported,\n");
+           fprintf(stderr, " support level = %d\n\n", threadSupportLevel);
            exit(1);
         }
         
