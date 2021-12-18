@@ -11,7 +11,9 @@ To use it, OpenMPI must be installed from source, not via a binary package.
 	./configure --prefix=/usr/local  --enable-mpi-java --disable-mpi-fortran
    (unless you want Fortran, in which case remove that last switch)
 6. Run: 
-	make all install
+        make all install
+   If this fails when it tries to mkdir /usr/local/share, rerun as follows:
+        sudo make all install
 7. If you then download this repo, you should be able to 'cd' into
     any of its folders, enter 'make' to build the patternlet, and
     then enter './run' to run the patternlet.
