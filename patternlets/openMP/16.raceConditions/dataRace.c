@@ -1,4 +1,5 @@
 /* dataRace.c is a patternlet for exploring data races.
+ * The program contains *two* race conditions; can you identify both?
  *
  * @author: Joel Adams, Calvin University.
  *
@@ -26,12 +27,7 @@ int main(int argc, char** argv) {
    int numThreads = getCommandLineArgs(argc, argv);
    omp_set_num_threads(numThreads);
 
-   if (numThreads > 1) {
-      printf("\nRunning with %d threads; let's have a race!\n", numThreads);
-   } else {
-      printf("\nUsage: ./dataRace N\n\n\tPlease run with N > 1 threads.\n\n");
-      exit(1);
-   }
+   printf("\nRunning with %d threads; let's have a race!\n", numThreads);
 
    int sharedVar = -1;
    #pragma omp parallel
@@ -50,10 +46,16 @@ int main(int argc, char** argv) {
 }
 
 int getCommandLineArgs(int argc, char** argv) {
+   int numThreads = 1;
    if (argc > 1) {
-      return atoi(argv[1]);
-   } else {
-      return 1;
+      numThreads = atoi(argv[1]);
    }
+
+   if (numThreads < 2) {
+      printf("\nUsage: ./dataRace N\n\n\tPlease run with N > 1 threads.\n\n");
+      exit(1);
+   }
+
+   return numThreads;
 }
 
