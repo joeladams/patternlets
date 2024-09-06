@@ -7,7 +7,7 @@ Contributors:
 - Libby Shoop, Macalester College
 
 Each patternlet source file resides in its own folder,
-which contains a Makefile to build it.The exception to this is the
+which contains a Makefile to build it. The exception to this is the
 mpi4py patternlets, which are executed as described in each code file.
 
 In a Terminal, use the 'cd' command to change directory
