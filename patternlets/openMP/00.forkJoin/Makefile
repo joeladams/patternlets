@@ -1,8 +1,9 @@
-OBJ    = forkJoin
+PROG   = forkJoin
+SRC    = $(PROG).c
 
 CC     = gcc
 CFLAGS = -Wall -ansi -std=c99 
-LFLAGS = -o $(OBJ) 
+LFLAGS = -o $(PROG) 
 OS     = $(shell uname -s)
 
 ifeq ($(OS), Darwin)
@@ -10,13 +11,14 @@ CFLAGS += -Xclang -fopenmp
 LFLAGS += -lomp
 else
 CFLAGS += -pedantic
+LFLAGS += -fopenmp
 endif
 
-all: $(OBJ)
+all: $(PROG)
 
-$(OBJ): $(OBJ).c
-	$(CC) $(CFLAGS) $(OBJ).c $(LFLAGS)
+$(PROG): $(SRC)
+	$(CC) $(CFLAGS) $(SRC) $(LFLAGS)
 
 clean:
-	rm -f a.out $(OBJ)
+	rm -f a.out $(PROG)
 
