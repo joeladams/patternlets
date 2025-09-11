@@ -1,7 +1,7 @@
 /* parallelLoopChunks.c illustrates the parallel loop pattern in MPI
  *  in which processes perform the loop's iterations in 'chunks' whose
- *  sizes differ by at most 1 (useful when iterations is not evenly
- *  divisible by the number of processes).
+ *  sizes differ by at most 1 (useful when the number of iterations
+ *  are not evenly divisible by the number of processes).
  *
  *  By Joel Adams, Calvin University, Sept 2025.
  *
