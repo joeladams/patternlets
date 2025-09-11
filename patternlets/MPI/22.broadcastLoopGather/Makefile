@@ -1,4 +1,5 @@
-PROG = broadcastLoop
+PROG = broadcastLoopGather
+
 CC = mpicc
 CFLAGS = -Wall -ansi -pedantic -std=c99
 LFLAGS = -o $(PROG) -lm
