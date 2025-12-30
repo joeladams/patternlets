@@ -1,5 +1,5 @@
-PROG = parallelLoopChunksOf1
-CC = mpicc
+PROG   = parallelLoopSlices
+CC     = mpicc
 CFLAGS = -Wall -ansi -pedantic -std=c99 
 LFLAGS = -o $(PROG)
 

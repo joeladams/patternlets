@@ -1,13 +1,14 @@
-/* parallelLoopChunksOf1.c
+/* parallelLoopSlices.c
  * ... illustrates the parallel for loop pattern in MPI
- *	in which processes perform the loop's iterations in 'chunks'
- *      of size 1 (simple, and useful when loop iterations
+ *	in which processes perform the loop's iterations in 'slices'
+ *      or chunks of size 1 (simple, and useful when loop iterations
  *      do not access memory/cache locations) ...
- * Note this is much simpler than the 'equal chunks' loop.
+ * Note this is much simpler than the 'chunks' loop.
+ *
  * Joel Adams, Calvin College, November 2009.
  *   updated by Libby Shoop, Macalester College, July, 2017
  *
- * Usage: mpirun -np N ./parallelLoopChunksOf1
+ * Usage: mpirun -np N ./parallelLoopSlices
  *
  * Exercise:
  * - Compile and run, varying N: 1, 2, 3, 4, 5, 6, 7, 8
